@@ -4,7 +4,7 @@
 from django.shortcuts import render
 import os
 import json
-
+from datetime import datetime
 from products.models import ProductCategory, Product
 
 MODULE_DIR = os.path.dirname(__file__)  # в этой переменной будем сдержать путь до папки products
@@ -13,6 +13,7 @@ MODULE_DIR = os.path.dirname(__file__)  # в этой переменной бу�
 def index(request):
     context = {
         'title': 'GeekShop',
+        'now_date': datetime.now(),
     }
     return render(request, 'products/index.html', context)
 
