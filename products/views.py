@@ -5,6 +5,8 @@ from django.shortcuts import render
 import os
 import json
 
+from products.models import ProductCategory, Product
+
 MODULE_DIR = os.path.dirname(__file__)  # в этой переменной будем сдержать путь до папки products
 
 
@@ -21,6 +23,7 @@ def products(request, pk=None):
     context = {
         'title': 'GeekShop-Каталог',
         'link_menu': ['Новинки', 'Одежда', 'Обувь', 'Аксессуары', 'Подарки'],
-        'products': json.load(open(file_path, encoding="utf-8")),
+        'categories': ProductCategory.objects.all(),
+        'products': Product.objects.all(),
     }
     return render(request, 'products/products.html', context)
