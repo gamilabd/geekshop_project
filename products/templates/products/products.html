@@ -18,8 +18,8 @@
 
                 <h1 class="my-4">GeekShop</h1>
                 <div class="list-group">
-                    {% for menu in link_menu  %}
-                        <a href="#" class="list-group-item">{{ menu }}</a>
+                    {% for category in categories  %}
+                        <a href="#" class="list-group-item">{{ category }}</a>
                     {% endfor %}
                 </div>
 
@@ -62,7 +62,7 @@
                         <div class="card h-100">
                             <a href="#">
                                 <img class="card-img-top"
-                                     src="{% static product.image %}"
+                                     src="{{ product.image.url }}"
                                      alt="">
                             </a>
                             <div class="card-body">

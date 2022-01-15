@@ -23,7 +23,6 @@ def products(request, pk=None):
     file_path = os.path.join(MODULE_DIR, 'fixtures/goods.json')  # содержить польный путь до файла goods.json
     context = {
         'title': 'GeekShop-Каталог',
-        'link_menu': ['Новинки', 'Одежда', 'Обувь', 'Аксессуары', 'Подарки'],
         'categories': ProductCategory.objects.all(),
         'products': Product.objects.all(),
     }
