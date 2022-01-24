@@ -36,7 +36,7 @@ def registration(request):
     context = {'title': 'GeekShop - Регистрация', 'form': form}
     return render(request, 'users/registration.html', context)
 
-
+@login_required
 def profile(request):
     if request.method == "POST":
         form = UserProfileForm(instance=request.user, files=request.FILES, data=request.POST)
