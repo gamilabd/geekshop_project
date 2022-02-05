@@ -27,6 +27,17 @@ def basket_remove(request, id):
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
-
+def basket_edit(request, id, quantity):
+    if request.is_ajax():
+        basket = Basket.objects.get(id=id)
+        if quantity > 0:
+            basket.quantity = quantity
+            basket.save()
+        else:
+            basket.delete()
+    baskets = Basket.objects.filter(user=request.user)
+    context = {'baskets': baskets}
+    result = render_to_string('baskets/baskets.html', context)
+    return JsonResponse({'result': result})
 
 
