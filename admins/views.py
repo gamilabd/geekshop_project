@@ -1,4 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponseRedirect
+from users.models import User
+from admins.forms import UserAdminRegistrationForm
+from django.urls import reverse
 
 # Create your views here.
 
@@ -8,12 +11,22 @@ def index(request):
 
 # create
 def admin_users_create(request):
-    context = {'title': 'Geekshop - Создание пользователя'}
+    if request.method == 'POST':
+        form = UserAdminRegistrationForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            form.save()
+          #  messages.success(request, "Вы успешно зарегистрировались!")
+            return HttpResponseRedirect(reverse('admins:admin_users'))
+    else:
+        form = UserAdminRegistrationForm()
+    context = {'title': 'Geekshop - Создание пользователя', 'form': form}
     return render(request, 'admins/admin-users-create.html', context)
 
 # read
 def admin_users(request):
-    context = {'title': 'Geekshop - Пользователи'}
+    context = {'title': 'Geekshop - Пользователи',
+               'users': User.objects.all(),
+               }
     return render(request, 'admins/admin-users-read.html', context)
 
 #ubdate
