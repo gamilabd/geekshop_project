@@ -1,2 +1,4 @@
-django=3.2.10
-Python=3.8.9
+Django~=3.2.10
+Python~=3.8.9
+
+Django~=3.2.10

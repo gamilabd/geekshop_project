@@ -4,11 +4,13 @@ from admins.forms import UserAdminRegistrationForm, UserAdminProfileForm
 from django.urls import reverse
 from django.contrib.auth.decorators import user_passes_test
 
+
 # Create your views here.
 @user_passes_test(lambda u: u.is_staff)
 def index(request):
     context = {'title': 'Geekshop - Админ Панель'}
     return render(request, 'admins/index.html', context)
+
 
 # create
 @user_passes_test(lambda u: u.is_staff)
@@ -17,12 +19,13 @@ def admin_users_create(request):
         form = UserAdminRegistrationForm(data=request.POST, files=request.FILES)
         if form.is_valid():
             form.save()
-          #  messages.success(request, "Вы успешно зарегистрировались!")
+            #  messages.success(request, "Вы успешно зарегистрировались!")
             return HttpResponseRedirect(reverse('admins:admin_users'))
     else:
         form = UserAdminRegistrationForm()
     context = {'title': 'Geekshop - Создание пользователя', 'form': form}
     return render(request, 'admins/admin-users-create.html', context)
+
 
 # read
 @user_passes_test(lambda u: u.is_staff)
@@ -32,7 +35,8 @@ def admin_users(request):
                }
     return render(request, 'admins/admin-users-read.html', context)
 
-#ubdate
+
+# ubdate
 @user_passes_test(lambda u: u.is_staff)
 def admin_users_update(request, id):
     selected_user = User.objects.get(id=id)
@@ -47,14 +51,15 @@ def admin_users_update(request, id):
         'title': 'Geekshop - Обнавление пользователя',
         'form': form,
         'selected_user': selected_user,
-               }
+    }
     return render(request, 'admins/admin-users-update-delete.html', context)
 
-#delete
+
+# delete
 @user_passes_test(lambda u: u.is_staff)
 def admin_users_remove(request, id):
     user = User.objects.get(id=id)
-    #user.safe_delete()
+    # user.safe_delete()
     user.is_active = False
     user.save()
     return HttpResponseRedirect(reverse('admins:admin_users'))
