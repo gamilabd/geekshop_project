@@ -6,7 +6,7 @@ import os
 import json
 from datetime import datetime
 from products.models import ProductCategory, Product
-from django.core.paginator import Paginator, EmptyPage, Page
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 MODULE_DIR = os.path.dirname(__file__)  # в этой переменной будем сдержать путь до папки products
 
@@ -28,5 +28,12 @@ def products(request, category_id=None, page=1, pk=None):  #(request, category_i
         products = Product.objects.filter(category=category)
     else:
         products = Product.objects.all()
-    context['products'] = products
+    paginator = Paginator(products, 3)
+    try:
+        products_paginator = paginator.page(page)
+    except PageNotAnInteger:
+        products_paginator = paginator.page(1)
+    except EmptyPage:
+        products_paginator = paginator.page(paginator.num_pages)
+    context['products'] = products_paginator
     return render(request, 'products/products.html', context)
