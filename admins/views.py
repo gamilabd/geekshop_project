@@ -49,7 +49,7 @@ class UserListView(ListView):
 
     @method_decorator(user_passes_test(lambda u: u.is_staff))
     def dispatch(self, request, *args, **kwargs):
-        return super(UserListView, self).dispatch(self, request, *args, **kwargs)
+        return super(UserListView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(UserListView, self).get_context_data(**kwargs)
@@ -101,6 +101,15 @@ class UserDeleteView(DeleteView):
     model = User
     template_name = 'admins/admin-users-update-delete.html'
     success_url = reverse_lazy('admins:admin_users')
+
+    # def delete(self, request, *args, **kwargs):
+    #     self.object = self.get_object()
+    #     self.object.is_active = False
+    #     self.object.save()
+    #     return HttpResponseRedirect(self.get_success_url())
+
+# ПРИШЛОСЬ использовать self.object.is_active = False и self.object.save(), чтобы поменять статус пользователя
+# К СОЖАЛЕНИЮ метод  self.object.safe_delete() не работал.
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
