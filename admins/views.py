@@ -8,8 +8,6 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 
 # Create your views here.
-
-
 @user_passes_test(lambda u: u.is_staff)
 def index(request):
     context = {'title': 'Geekshop - Админ Панель'}
@@ -22,6 +20,7 @@ class UserCreateView(CreateView):
     template_name = 'admins/admin-users-create.html'
     form_class = UserAdminRegistrationForm
     success_url = reverse_lazy('admins:admin_users')
+
 
 # @user_passes_test(lambda u: u.is_staff)
 # def admin_users_create(request):
@@ -38,8 +37,6 @@ class UserCreateView(CreateView):
 
 
 # read
-
-
 class UserListView(ListView):
     model = User
     template_name = 'admins/admin-users-read.html'
@@ -79,12 +76,17 @@ class UserUpdateView(UpdateView):
 #     return render(request, 'admins/admin-users-update-delete.html', context)
 
 
-# delete
+# deletec
 class UserDeleteView(DeleteView):
     model = User
     template_name = 'admins/admin-users-update-delete.html'
     success_url = reverse_lazy('admins:admin_users')
 
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.safe_delete()
+        return HttpResponseRedirect(success_url)
 
 # @user_passes_test(lambda u: u.is_staff)
 # def admin_users_remove(request, id):
