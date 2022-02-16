@@ -2,13 +2,14 @@ from django.shortcuts import render, HttpResponseRedirect
 from users.models import User
 from admins.forms import UserAdminRegistrationForm, UserAdminProfileForm
 from django.urls import reverse, reverse_lazy
+from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import user_passes_test
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 
 # Create your views here.
-@user_passes_test(lambda u: u.is_staff)
+# @user_passes_test(lambda u: u.is_staff)
 def index(request):
     context = {'title': 'Geekshop - Админ Панель'}
     return render(request, 'admins/index.html', context)
@@ -45,6 +46,10 @@ class UserCreateView(CreateView):
 class UserListView(ListView):
     model = User
     template_name = 'admins/admin-users-read.html'
+
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    def dispatch(self, request, *args, **kwargs):
+        return super(UserListView, self).dispatch(self, request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(UserListView, self).get_context_data(**kwargs)
